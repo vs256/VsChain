@@ -1,4 +1,4 @@
-# VSchain
+# VsChain
 
 Blockchain with proof-of-work
 
