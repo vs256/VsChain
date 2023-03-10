@@ -9,6 +9,12 @@ TODO: An in-depth paragraph about your project and overview of use.
 Validation with previous block
 Proof-of-Work consensus mechanism
 
+The way mining difficulty is calculated
+
+``` 
+New difficulty = old difficulty * (100 blocks * blockTime) / mining time for the previous 100 blocks
+```
+
 ## Getting Started
 
 ### Dependencies

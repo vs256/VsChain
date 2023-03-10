@@ -1,3 +1,5 @@
+const { log16 } = require("./utils/utils.js");
+
 const crypto = require("crypto"), SHA256 = message => crypto.createHash("sha256").update(message).digest("hex");
 
 class Block {
@@ -14,7 +16,8 @@ class Block {
     }
 
     mine(difficulty) {
-        while(!this.hash.startsWith(Array(difficulty + 1).join("0")))
+        //loop until the hash has "5+difficulty" starting zeros
+        while(!this.hash.startsWith("00000" + Array(Math.floor(log16(difficulty)) + 1).join("0")))
         {
             this.nonce++;
             this.hash = this.getHash();
@@ -42,7 +45,14 @@ class Blockchain {
 
         this.chain.push(block);
         
-        this.difficulty += Date.now() - parseInt(this.getLastBlock().timestamp) < this.blockTime ? 1 : -1;
+
+        // The difficulty will be incremented by 1 if block time is less than the actual time the block's mined,
+        // it will be decremented otherwise.
+        // this.difficulty += Date.now() - parseInt(this.getLastBlock().timestamp) < this.blockTime ? 1 : -1;
+        //
+
+        //new difficulty = old difficulty * (100 blocks * blockTime) / mining time for the previous 100 blocks
+        this.difficulty = Math.ceil(this.difficulty * 100 * this.blockTime / (block.timestamp - this.getLastBlock().timestamp));
     }
 
     isValid(blockchain = this) {
