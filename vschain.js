@@ -6,10 +6,19 @@ class Block {
         this.data = data;
         this.hash = this.getHash(); //this makes it immutable. Contains hash of timestamp, previous data, etc..
         this.prevHash = ""; //hash of previous block
+        this.nonce = 0;
     }
 
     getHash() {
-        return SHA256(JSON.stringify(this.data)+this.timestamp+this.prevHash);
+        return SHA256(JSON.stringify(this.data)+this.timestamp+this.prevHash + this.nonce);
+    }
+
+    mine(difficulty) {
+        while(!this.hash.startsWith(Array(difficulty + 1).join("0")))
+        {
+            this.nonce++;
+            this.hash = this.getHash();
+        }
     }
 
 }
@@ -17,6 +26,7 @@ class Block {
 class Blockchain {
     constructor() {
         this.chain = [new Block(Date.now().toString())];
+        this.difficulty = 1;
     }
 
     getLastBlock() {
@@ -27,6 +37,7 @@ class Blockchain {
         block.prevHash = this.getLastBlock().hash;
         block.hash = block.getHash();
 
+        block.mine(this.difficulty);
         this.chain.push(block);
     }
 
@@ -49,9 +60,8 @@ class Blockchain {
 
 const VsChain = new Blockchain();
 VsChain.addBlock(new Block(Date.now().toString(), ["Hello", "World"])); //genesis block
-
-//debug
-VsChain.chain[1].data = [1];
+VsChain.addBlock(new Block(Date.now().toString(), ["Hello", "Wurld"])); //genesis block
+VsChain.addBlock(new Block(Date.now().toString(), ["Hello", "Woorld"])); //genesis block
 console.log(VsChain.chain);
 console.log(VsChain.isValid());
 //

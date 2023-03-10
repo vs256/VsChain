@@ -1,10 +1,13 @@
 # VsChain
 
-Blockchain with proof-of-work
+Blockchain with validation, proof-of-work
 
 ## Description
 
 TODO: An in-depth paragraph about your project and overview of use.
+
+Validation with previous block
+Proof-of-Work consensus mechanism
 
 ## Getting Started
 
