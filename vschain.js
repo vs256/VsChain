@@ -16,7 +16,7 @@ class Block {
 
 class Blockchain {
     constructor() {
-        this.chain = [new Block(Date.now().string())];
+        this.chain = [new Block(Date.now().toString())];
     }
 
     getLastBlock() {
@@ -30,7 +30,28 @@ class Blockchain {
         this.chain.push(block);
     }
 
+    isValid(blockchain = this) {
+        for (let i = 1; i < blockchain.chain.length; i++)
+        {
+            const currentBlock = blockchain.chain[i]; 
+            const prevBlock = blockchain.chain[i-1];
+
+            if ((currentBlock.hash !== currentBlock.getHash()) || (currentBlock.prevHash !== prevBlock.hash))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
 }
 
 const VsChain = new Blockchain();
-VsChain.addBlock(new Block(Date.now().toString(), ["Hello", "World"]));
+VsChain.addBlock(new Block(Date.now().toString(), ["Hello", "World"])); //genesis block
+
+//debug
+VsChain.chain[1].data = [1];
+console.log(VsChain.chain);
+console.log(VsChain.isValid());
+//
